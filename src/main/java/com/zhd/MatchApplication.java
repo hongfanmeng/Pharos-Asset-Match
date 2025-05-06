@@ -1,0 +1,35 @@
+package com.zhd;
+
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.web.client.AsyncRestTemplate;
+
+
+@EntityScan("com.zhd.entity")
+@MapperScan("com.zhd.mapper")
+@SpringBootApplication
+@EnableAsync
+public class MatchApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(MatchApplication.class, args);
+    }
+
+    @Bean
+    public AsyncRestTemplate asyncRestTemplate() {
+        return new AsyncRestTemplate();
+    }
+
+    // TODO
+    /**
+     * 任务的 DAG图 只需从头到尾只需找到一条路径，根据机器人的位置的决定
+     * 增加上述的判断逻辑,做匹配
+     * 第一阶段：单个子任务只有一个设备来做
+     * 第二阶段：单个任务做接力导航
+     */
+
+}

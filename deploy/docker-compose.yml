@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: aa123456
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./asset_match.sql:/docker-entrypoint-initdb.d/asset_match.sql
+      - pg_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  flask_app:
+    build:
+      context: .
+      dockerfile: Dockerfile.flask
+    container_name: flask_service
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app_network
+    volumes:
+      - ./work_flow_service.py:/app/work_flow_service.py
+
+  springboot_app:
+    image: openjdk:8-jdk
+    container_name: springboot_service
+    ports:
+      - "18080:18080"
+    volumes:
+      - ./AssetMatch.jar:/app/AssetMatch.jar
+      - ./application.yml:/app/config/application.yml
+    working_dir: /app
+    environment:
+      - SPRING_CONFIG_LOCATION=/app/config/application.yml
+    command: ["java", "-jar", "-Dspring.config.location=/app/config/application.yml","AssetMatch.jar"]
+    depends_on:
+      - postgres
+      - flask_app
+    networks:
+      - app_network
+
+volumes:
+  pg_data:
+
+networks:
+  app_network:
+    driver: bridge
