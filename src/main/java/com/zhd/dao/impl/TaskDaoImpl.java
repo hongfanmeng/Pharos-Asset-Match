@@ -43,6 +43,6 @@ public class TaskDaoImpl implements TaskDao {
 
     @Override
     public List<Requirement> getAllRequirements() {
-        return requirementMapper.selectList(null);
+        return requirementMapper.selectAllWithTasks();
     }
 }
