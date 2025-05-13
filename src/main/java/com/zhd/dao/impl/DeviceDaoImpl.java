@@ -62,4 +62,9 @@ public class DeviceDaoImpl implements DeviceDao {
             assetDeviceMapper.insertCapability(capability);
         }
     }
+
+    @Override
+    public String getTrack(Long deviceId) {
+        return assetDeviceMapper.getTrack(deviceId);
+    }
 }

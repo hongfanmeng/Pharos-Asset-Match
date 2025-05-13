@@ -1,12 +1,17 @@
 package com.zhd.algorithm;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.zhd.dao.AssetMatchDao;
 import com.zhd.dao.DeviceDao;
 import com.zhd.dao.TaskDao;
 import com.zhd.entity.AssetDevice;
 import com.zhd.entity.Task;
+import com.zhd.ws.WebSocketServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class TaskProcessor {
@@ -16,6 +21,10 @@ public class TaskProcessor {
     private DeviceDao deviceDao;
     @Autowired
     private AssetMatchDao assetMatchDao;
+    @Autowired
+    private WebSocketServer webSocketServer;
+
+
     public  AssetDevice fetchDevice(Task task) throws InterruptedException {
         task.setStatus(1);
         taskDao.insertTask(task);
@@ -39,11 +48,28 @@ public class TaskProcessor {
         return assetDevice;
     }
 
-    public  void execute(Task task,int period) throws InterruptedException {
+    public  void execute(AssetDevice device,Task task,int period) throws InterruptedException {
         task.setStatus(2);
         taskDao.updateTask(task);
-        // TODO 执行  用休眠模拟
-        Thread.sleep(period*1000);
+        // 执行  用休眠模拟
+        String track = deviceDao.getTrack(device.getDeviceId());
+        double [] d=new double[2];
+        List<? extends double[]> trackData = JSONObject.parseArray(track, d.getClass());
+        int size=trackData==null||trackData.isEmpty()?1:trackData.size();
+        trackData.forEach((e)->{
+            double[] location=e;
+            try {
+                Thread.sleep(5000L*period/size);
+                device.setStatus(1);
+                device.setLongitude(location[0]);
+                device.setLatitude(location[1]);
+                deviceDao.updateDevice(device);
+                System.out.println(5000L*period/trackData.size()+"】"+device.getDeviceName()+" move to "+location[0]+","+location[1]);
+                webSocketServer.sendDeviceChange(device);
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        });
         System.out.println("执行任务完毕:"+task);
     }
 

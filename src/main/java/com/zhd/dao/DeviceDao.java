@@ -15,4 +15,5 @@ public interface DeviceDao {
      List<AssetDevice> getDevices();
      void setCapability(Map<Long,List<Integer>> map);
      void insertCapability(List<Capability> capabilities);
+     String getTrack(Long deviceId);
 }

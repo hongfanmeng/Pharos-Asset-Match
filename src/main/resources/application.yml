@@ -6,7 +6,7 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/
+    url: jdbc:postgresql://localhost:5432/asset_match
     username: postgres
     password: aa123456
     type: com.zaxxer.hikari.HikariDataSource
@@ -29,6 +29,9 @@ spring:
 
 flow:
   url: http://localhost:5000
+
+script:
+  data-gen: ./sql/data_gen.sql
 
 mybatis-plus:
   type-handlers-package: com.zhd.handler

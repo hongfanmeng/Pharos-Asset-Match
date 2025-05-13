@@ -1,5 +1,8 @@
 package com.zhd.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.zhd.dao.TaskDao;
 import com.zhd.entity.Task;
 import com.zhd.entity.flow.Requirement;
@@ -12,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -91,5 +95,17 @@ class TaskServiceImplTest {
         List<Requirement> allRequirements = taskService.getAllRequirements();
         WorkFlow workFlow = taskService.generateWorkFlow(allRequirements.get(0));
         System.out.println(workFlow);
+    }
+    
+    @Test
+    void jsonTest(){
+        double [] d=new double[2];
+        System.out.println(d.getClass());
+        String jsonStr="[[-1.2,0.3],[0.0,-2.2323]]";
+        List<? extends double[]> doubles = JSONObject.parseArray(jsonStr, d.getClass());
+        doubles.forEach((e)->{
+            double [] e1=(double[])e;
+            System.out.println(e1[0]);
+        });
     }
 }

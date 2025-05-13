@@ -28,4 +28,7 @@ public interface AssetDeviceMapper extends BaseMapper<AssetDevice> {
             "  SELECT cap_id FROM device_capability WHERE device_id=#{deviceId}" +
             ")")
     List<Capability> getCapabilityByDevice(Long deviceId);
+
+    @Select("SELECT track FROM taxi_track WHERE device_id=#{deviceId}")
+    String getTrack(Long deviceId);
 }

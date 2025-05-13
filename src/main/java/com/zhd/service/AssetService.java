@@ -14,4 +14,5 @@ public interface AssetService {
     List<MatchItem> getLedger();
     void setCapability(Map<Long,List<Integer>> map);
     void insertCapability(List<Capability> capabilities);
+    void resetDB();
 }

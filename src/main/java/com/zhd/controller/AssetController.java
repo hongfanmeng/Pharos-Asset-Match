@@ -54,4 +54,10 @@ public class AssetController {
     public List<MatchItem> getLedger(){
        return assetService.getLedger();
    }
+
+   @PostMapping("/reset")
+    public void resetData(){
+       assetService.resetDB();
+       System.out.println("=== 数据重置成功 ===");
+   }
 }

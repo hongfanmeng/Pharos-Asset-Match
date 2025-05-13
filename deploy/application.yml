@@ -30,5 +30,8 @@ spring:
 flow:
   url: http://flask_service:5000
 
+script:
+  data-gen: /app/data_gen.sql
+
 mybatis-plus:
   type-handlers-package: com.zhd.handler

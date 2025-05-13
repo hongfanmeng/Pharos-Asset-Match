@@ -99,7 +99,7 @@ public class FlowProcessor {
                             sourceThread.join();
                             System.out.println("Start Sequence Flow: " + sequenceFlow);
                             Integer period = sequenceFlow.getPeriod();
-                            if (period == null) period = 0;
+                            if (period == null||period<=0) period = 10;
                             // 1. 找到合适的设备来执行
                             AssetDevice assetDevice = taskProcessor.fetchDevice(task);
                             System.out.println("The device:"+assetDevice);
@@ -110,7 +110,7 @@ public class FlowProcessor {
                             }
 
                             // 2. 执行中
-                            taskProcessor.execute(task,  period);
+                            taskProcessor.execute(assetDevice,task,  period);
 
                             // 3. 执行完成，更改task状态为完成
                             // 释放设备资源

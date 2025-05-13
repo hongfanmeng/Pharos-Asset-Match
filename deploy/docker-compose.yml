@@ -43,6 +43,7 @@ services:
       - "18080:18080"
     volumes:
       - ./AssetMatch.jar:/app/AssetMatch.jar
+      - ./data_gen.sql:/app/data_gen.sql
       - ./application.yml:/app/config/application.yml
     working_dir: /app
     environment:
