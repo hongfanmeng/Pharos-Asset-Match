@@ -1,0 +1,4 @@
+docker-compose
+docker-compose.exe
+*.jar
+*.sql
